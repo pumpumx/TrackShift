@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     // Base Options recommended for all projects
-    "typeRoots": ["./src/types" , "./node_modules/@types"],
+    "typeRoots": [
+      "./src/types",
+      "./node_modules/@types"
+    ],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "es2022",
@@ -28,7 +31,8 @@
   },
   // Include the necessary files for your project
   "include": [
-    "**/*.ts"],
+    "**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

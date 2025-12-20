@@ -1,8 +1,6 @@
 import dgram, { type RemoteInfo } from 'dgram';
-import { SocketEvents, UdpEvents } from '../types/SocketEvents.ts';
+import { UdpEvents } from '../types/SocketEvents.ts';
 import { handleStreamedData } from '../DataHandler/HandleData.ts';
-import { relayServer } from '../index.ts';
-import { socketServer } from '../socketServer/SocketServer.ts';
 import crypto from 'crypto'
 
 export class UdPServer {
@@ -25,6 +23,7 @@ export class UdPServer {
             {
                 address: '0.0.0.0',
                 port: 4443,
+
             },
             () => {
                 console.log('Dgram socket binded to port 4443');
@@ -62,10 +61,10 @@ export class UdPServer {
 
                 this.sendAck(seq, rinfo)
 
-                // console.log("Encrypted data" , payload)
+                console.log("Encrypted data: " , payload)
                 if (flag == 99) {
                     this.sessionSalt = payload
-                    console.log("session salt recieved", payload.toString('hex'))
+                    // console.log("session salt recieved", payload.toString('hex'))
                     return;
                 }
                 if (flag == 0) {
@@ -112,9 +111,6 @@ export class UdPServer {
     private decryptAESGCM(iv: Buffer, encrypted: Buffer): Buffer {
         const authTag = encrypted.slice(encrypted.length - 16);
         const ciphertext = encrypted.slice(0, encrypted.length - 16);
-
-        console.log("AESKEY: ", process.env.AES_KEY);
-
         const key = Buffer.from(process.env.AES_KEY! , 'hex')
         const decipher = crypto.createDecipheriv("aes-256-gcm",key , iv);
         decipher.setAuthTag(authTag);
